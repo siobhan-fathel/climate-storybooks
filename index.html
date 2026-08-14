@@ -172,13 +172,22 @@
   }
 
   .card-thumb {
-    height: 180px;
+    aspect-ratio: 2/3;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
     flex-shrink: 0;
+  }
+
+  .card-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   /* Each card gets a theme color via JS */
@@ -331,12 +340,21 @@
   }
 
   .modal-header {
-    height: 200px;
+    aspect-ratio: 2/3;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     font-size: 80px;
+  }
+
+  .modal-header img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .modal-header .thumb-pattern {
@@ -488,10 +506,21 @@
   @media (max-width: 680px) {
     header { min-height: auto; }
     .header-content { padding: 32px 24px; }
-    .controls { padding: 24px 24px 8px; }
-    .search-wrap { margin-left: 0; }
-    .grid { padding: 16px 24px 60px; gap: 20px; }
-    footer { padding: 24px; }
+    .controls { padding: 24px 24px 8px; flex-wrap: wrap; }
+    .search-wrap { margin-left: 0; width: 100%; }
+    .search-wrap input { width: 100%; }
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      padding: 16px 16px 60px;
+      gap: 14px;
+    }
+    .card-body { padding: 12px 14px 14px; }
+    .card-body h2 { font-size: 0.95rem; }
+    .card-body p { font-size: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .tag { font-size: 9px; padding: 2px 7px; }
+    .card-author { font-size: 11px; }
+    .play-badge { font-size: 10px; padding: 4px 8px 4px 6px; }
+    footer { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 6px; }
   }
 </style>
 </head>
@@ -500,9 +529,9 @@
 <header>
   <div class="header-bg"></div>
   <div class="header-content">
-    <div class="eyebrow">Susquehanna University · EENV-242</div>
+    <div class="eyebrow">Read Aloud · Learn · Explore</div>
     <h1>Climate <em>Storybooks</em><br>Read Aloud</h1>
-    <p>Student-created children's books and read-aloud videos exploring climate science — built in the classroom, shared with the world.</p>
+    <p>Climate stories written and read aloud by Susquehanna University students, for curious kids and the people who teach them.</p>
   </div>
 </header>
 
@@ -541,8 +570,8 @@
 </div>
 
 <footer>
-  <div><strong>Climate Storybooks</strong> · Center for Environment, Energy and Resources · Susquehanna University</div>
-  <div>Earth Week · EENV-242: Climate and Global Change</div>
+  <div><strong>Climate Storybooks</strong> · Susquehanna University</div>
+  <div>EENV-242: Climate and Global Change</div>
 </footer>
 
 <script>
@@ -558,16 +587,20 @@ const THEMES = [
 const STORIES = [
   {
     id: 1,
-    title: "Where Did the Coral Go?",
-    author: "Maya Chen",
-    grade: "Grades K–2",
-    topic: "ocean",
+    title: "Where Did the Pikas Go?",
+    author: "Siobhan Fathel",
+    //grade: "Grades K–2",
+    topic: "wildlife",
     duration: "4:32",
-    summary: "Nemo the clownfish notices his reef home turning pale and quiet. Follow along as he and his friends discover what ocean warming means for their colorful world.",
-    description: "A gentle introduction to coral bleaching told through the eyes of a curious clownfish. Students learn how rising ocean temperatures affect marine ecosystems and what communities are doing to protect reefs.",
-    themes: ["Ocean", "Biodiversity"],
-    hasVideo: true,
+    summary: "Meet Pip, a small pika with big cheeks and a haypile to build. When the mountain gets too warm, Pip has to figure out where to go — and learns he is not alone.",
+    description: "Where Did the Pikas Go? follows Pip, an American pika living in the cool rocky mountains of western North America. When rising temperatures make his habitat too warm, Pip must climb higher — only to find less food waiting at the top. Along the way, Pip meets scientists studying how pikas are responding to a warming world, and discovers that even small animals are part of something bigger. Based on real research on pika population change and climate adaptation.",
+    themes: ["Wildlife", "Biodiversity"],
+hasVideo: true,
     hasPDF: true,
+    imageUrl: "book_covers/Fathel_Pikas.png",
+    videoUrl: "",
+    pdfUrl: "book_pdfs/Fathel_Pikas.pdf",
+    guideUrl: "",
   },
   {
     id: 2,
@@ -579,8 +612,12 @@ const STORIES = [
     summary: "When Grandma's town floods for the third summer in a row, Lily starts asking why storms seem bigger than ever. A multigenerational story about climate and memory.",
     description: "Explores changing precipitation patterns and extreme weather events through the relationship between a grandmother and grandchild. Includes discussion prompts about community resilience.",
     themes: ["Weather", "Community"],
-    hasVideo: true,
+hasVideo: true,
     hasPDF: true,
+    imageUrl: "",
+    videoUrl: "",
+    pdfUrl: "",
+    guideUrl: "",
   },
   {
     id: 3,
@@ -592,8 +629,12 @@ const STORIES = [
     summary: "A young monarch butterfly embarks on her first migration, only to find that the milkweed meadows she needs are harder to find than ever before.",
     description: "Follows a monarch butterfly's migration to illustrate habitat loss and the role of temperature shifts in disrupting animal behavior. Pairs well with science activities about life cycles.",
     themes: ["Wildlife", "Migration"],
-    hasVideo: true,
+hasVideo: true,
     hasPDF: false,
+    imageUrl: "",
+    videoUrl: "",
+    pdfUrl: "",
+    guideUrl: "",
   },
   {
     id: 4,
@@ -605,8 +646,12 @@ const STORIES = [
     summary: "Mia's family has hiked to the same glacier every year for four generations. This year, she notices something missing — and asks her geologist aunt to explain.",
     description: "Uses a family hiking tradition to explore glacial retreat and sea level rise. Includes data-driven storytelling and prompts for comparing historical photographs with present-day images.",
     themes: ["Ice & Snow", "Family"],
-    hasVideo: false,
+hasVideo: false,
     hasPDF: true,
+    imageUrl: "",
+    videoUrl: "",
+    pdfUrl: "",
+    guideUrl: "",
   },
   {
     id: 5,
@@ -618,8 +663,12 @@ const STORIES = [
     summary: "When the seasons start arriving at the wrong time, Mrs. Rosa and her neighbors turn their block into a community garden — and discover they can grow food and hope together.",
     description: "A warm, solutions-focused story about how communities respond to shifting growing seasons. Emphasizes collective action and local food systems as climate responses.",
     themes: ["Community", "Food"],
-    hasVideo: true,
+hasVideo: true,
     hasPDF: true,
+    imageUrl: "",
+    videoUrl: "",
+    pdfUrl: "",
+    guideUrl: "",
   },
   {
     id: 6,
@@ -631,8 +680,12 @@ const STORIES = [
     summary: "Every summer, Juno visits the tide pools with her dad. But this year, the starfish are gone and the anemones look different. A story of curiosity and careful observation.",
     description: "Introduces ocean acidification and intertidal ecology through a child scientist's eyes. Encourages observation skills and scientific curiosity. Includes a one-page field guide activity.",
     themes: ["Ocean", "Science"],
-    hasVideo: true,
+hasVideo: true,
     hasPDF: true,
+    imageUrl: "",
+    videoUrl: "",
+    pdfUrl: "",
+    guideUrl: "",
   },
 ];
 
@@ -653,9 +706,11 @@ function renderCards(stories) {
     card.className = 'card';
     card.dataset.id = s.id;
     card.innerHTML = `
-      <div class="card-thumb" style="background:${theme.bg}">
-        <div class="thumb-pattern"></div>
-        <span class="thumb-icon">${theme.icon}</span>
+      <div class="card-thumb" style="background:${s.imageUrl ? '#f5f5f5' : theme.bg}">
+        ${s.imageUrl
+          ? '<img src="' + s.imageUrl + '" alt="' + s.title + ' book cover">'
+          : '<div class="thumb-pattern"></div><span class="thumb-icon">' + theme.icon + '</span>'
+        }
         ${s.hasVideo ? `<div class="play-badge">
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           ${s.duration}
@@ -669,7 +724,7 @@ function renderCards(stories) {
         <p>${s.summary}</p>
         <div class="card-meta">
           <div class="card-author">By <span>${s.author}</span></div>
-          <div class="card-grade">${s.grade}</div>
+          <!-- <div class="card-grade">${s.grade}</div> -->
         </div>
       </div>
     `;
@@ -680,17 +735,29 @@ function renderCards(stories) {
 
 function openModal(s) {
   const theme = getTheme(s.topic);
-  document.getElementById('modal-header').style.background = theme.bg;
-  document.getElementById('modal-icon').textContent = theme.icon;
+  const modalHeader = document.getElementById('modal-header');
+  modalHeader.style.background = s.imageUrl ? '#f5f5f5' : theme.bg;
+  // Remove any existing image
+  const existingImg = modalHeader.querySelector('img');
+  if (existingImg) existingImg.remove();
+  if (s.imageUrl) {
+    const img = document.createElement('img');
+    img.src = s.imageUrl;
+    img.alt = s.title + ' book cover';
+    modalHeader.insertBefore(img, modalHeader.firstChild);
+    document.getElementById('modal-icon').textContent = '';
+  } else {
+    document.getElementById('modal-icon').textContent = theme.icon;
+  }
   document.getElementById('modal-title').textContent = s.title;
   document.getElementById('modal-byline').innerHTML = `Written and read aloud by <strong>${s.author}</strong>`;
   document.getElementById('modal-tags').innerHTML = s.themes.map(t => `<span class="tag">${t}</span>`).join('');
   document.getElementById('modal-desc').textContent = s.description;
   document.getElementById('modal-info').innerHTML = `
-    <div class="modal-info-item">
+    <!-- <div class="modal-info-item">
       <span class="info-label">Grade Level</span>
       <span class="info-val">${s.grade}</span>
-    </div>
+    </div> -->
     ${s.hasVideo ? `<div class="modal-info-item">
       <span class="info-label">Video Length</span>
       <span class="info-val">${s.duration}</span>
@@ -701,9 +768,9 @@ function openModal(s) {
     </div>
   `;
   document.getElementById('modal-actions').innerHTML = `
-    ${s.hasVideo ? `<button class="btn btn-primary">▶ Watch Read-Aloud</button>` : ''}
-    ${s.hasPDF ? `<button class="btn btn-secondary">📄 Download Book (PDF)</button>` : ''}
-    <button class="btn btn-secondary">📋 Activity Guide</button>
+    ${s.hasVideo ? `<a href="${s.videoUrl || '#'}" target="_blank" class="btn btn-primary" ${!s.videoUrl ? 'style="opacity:0.4;pointer-events:none;"' : ''}>▶ Watch Read-Aloud</a>` : ''}
+    ${s.hasPDF ? `<a href="${s.pdfUrl || '#'}" target="_blank" class="btn btn-secondary" ${!s.pdfUrl ? 'style="opacity:0.4;pointer-events:none;"' : ''}>📄 Download Book (PDF)</a>` : ''}
+    <a href="${s.guideUrl || '#'}" target="_blank" class="btn btn-secondary" ${!s.guideUrl ? 'style="opacity:0.4;pointer-events:none;"' : ''}>📋 Activity Guide</a>
   `;
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow = 'hidden';
